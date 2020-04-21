@@ -67,6 +67,6 @@ for i=1:N
     
 end
 load('SI_without_motion.mat')
-simu_T1 = T1(1:10:end);
+simu_T1 = T1;
 variation = (SI_max-SI_min)/2./SI_mean;
 save('data.mat','variation','HR_all','disp_all','SI_max','SI_mean','SI_min','SI_no_motion','simu_T1')

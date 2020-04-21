@@ -94,7 +94,7 @@ set(gcf,'Position',[400,600,560,560])
 set(gca,'FontSize',20)
 grid on
 set(gca,'Layer','top')
-hgexport(fig1,'FIt_error_HR120_Disp2.eps');
+hgexport(fig1,'Fit_error_HR120_Disp2.eps');
 %%
 
 
@@ -169,7 +169,7 @@ set(gcf,'Position',[400,600,560,560])
 set(gca,'FontSize',20)
 grid on
 set(gca,'Layer','top')
-hgexport(fig2,'FIt_error_HR80_Disp1.eps');
+hgexport(fig2,'Fit_error_HR80_Disp1.eps');
 
 %%
 
@@ -244,7 +244,7 @@ set(gcf,'Position',[400,600,560,560])
 set(gca,'FontSize',20)
 grid on
 set(gca,'Layer','top')
-hgexport(fig3,'FIt_error_HR60_Disp0.5.eps');
+hgexport(fig3,'Fit_error_HR60_Disp0.5.eps');
 
 
 %%

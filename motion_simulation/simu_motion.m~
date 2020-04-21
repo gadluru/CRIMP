@@ -43,13 +43,13 @@ end
 fprintf('start simulation without motion:')
 tic
 SI_no_motion = zeros(9, 3000, 'single');
-T1 = 1:3000;
+simu_T1 = 1:3000;
 parfor i = 1:length(T1)
     simu_T1 = T1(i);
     slab_T1 = ones(3800,1)*simu_T1;
     SI_temp = simu_steady_state(flip_angle_slice, Mz, M0, TR, slab_T1);
-    SI_no_motion(:, i) = SI_temp(:,end);
+    SI_no_motion(:,i) = 
 end
 toc
-save('SI_without_motion.mat','SI_no_motion','T1');
+save('SI_without_motion','SI_no_motion','T1');
 fprintf('all finished\n')

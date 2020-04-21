@@ -1,5 +1,5 @@
 function [Image_PD,Data] = recon_PD_multiple_frames(kSpace_all,kSpace_info,para)
-
+fprintf('Reconstructe proton density weighted images:\n')
 kSpace_info.angle_mod = kSpace_info.angle_mod(:,1:kSpace_info.PD_rays,:);
 kSpace_info.phase_mod = kSpace_info.phase_mod(:,1:kSpace_info.PD_rays,:);
 kSpace_info.set = kSpace_info.set(:,1:kSpace_info.PD_rays,:);
@@ -55,6 +55,7 @@ Image_PD = zeros(siz,'single');
 % para.setting.ifGPU = 0;
 
 for i=1:nset
+    fprintf(sprintf('SMS slice group %g\n', i))
     scale = max(abs(Data{i}.first_est(:)));
     para.Recon.weight_tTV = scale*0.05;
     para.Recon.weight_sTV = scale*0.008;

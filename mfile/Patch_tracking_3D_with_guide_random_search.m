@@ -56,6 +56,7 @@ offset_init = -offset_init;
 
 offset_all = [];
 for iphase = 1:Nphase
+    fprintf(sprintf('Patch tracking for cardiac phase %g...', iphase))
     clear idx_all int_patch std_patch offset_all_phase
     N = 0;
     Image_temp = squeeze(im_bin(:,:,:,iphase,:));

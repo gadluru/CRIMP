@@ -62,6 +62,8 @@ para.kSpace_info = kSpace_info;
 %% estimate SMS-GROG operator
 fprintf('Estimate SMS-GROG operator...\n')
 for iset=1:nset
+    tic
+    fprintf(sprintf('SMS slice group %g\n', i))
     set_idx = kSpace_info.set==iset-1;
     kSpace_temp = kSpace(:,set_idx,:);
     theta_temp = kSpace_info.angle_mod(set_idx);
@@ -74,6 +76,7 @@ for iset=1:nset
         [kx_temp, ky_temp] = get_k_coor(sx,theta_temp_SMS,0,sx/2+1);
         [G{iset,isms}.Gx, G{iset,isms}.Gy] = GROG.get_Gx_Gy(kSpace_temp_SMS, kx_temp, ky_temp);
     end
+    toc
 end
 clear *temp* i*
 para.G = G;
@@ -98,10 +101,11 @@ para.Recon.self_gating.cardiac_signal = cardiac_signal;
 
 %% fix the number of cardiac phases for each cardiac cycle
 fprintf('Fix number of cardiac phases in all cardiac cycles...\n')
+tic
 [Data, para] = fix_Nphase(kSpace, kSpace_info, Image, para);
 clear Image kSpace
 save(fullfile(para.dir.save_recon_img_mat_dir,para.dir.save_recon_img_name),'para','-append')
-
+toc
 %% 2nd reconstruction stage initialization
 % put all sets into one Data structure
 para.Recon.noi = 50;
