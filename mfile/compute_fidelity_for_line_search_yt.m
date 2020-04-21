@@ -10,7 +10,7 @@ switch para.Recon.type
             fidelity_update = sum(fidelity_update.*Data.SMS,5);
             fidelity_update = fidelity_update(Data.mask);
             fidelity_update = Data.kSpace(:,i) - fidelity_update;
-            fidelity_norm = fidelity_norm + sum(abs(fidelity_update(:)).^2/prod(para.Recon.kSpace_size)/64);
+            fidelity_norm = fidelity_norm + sum(abs(fidelity_update(:)).^2/prod(para.Recon.kSpace_size));
         end
         fidelity_norm = sqrt(fidelity_norm);
         return

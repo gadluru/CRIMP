@@ -48,8 +48,7 @@ non_steady_state_rays = 360;
 para.trajectory_correction = RING_SMS(kSpace(:,set,:), kSpace_info.angle_mod(set), nSMS);
 
 %% reconstruct proton density (PD) weighted images
-% kSpace_info.PD_rays = kSpace_info.Protocol.lProtonDensMap*nset*kSpace_info.Protocol.sKSpace.lRadialViews;
-% Image_PD = recon_PD_multiple_frames(kSpace(:,1:kSpace_info.PD_rays,:),kSpace_info,para);
+Image_PD = recon_PD_multiple_frames(kSpace(:,1:kSpace_info.PD_rays,:),kSpace_info,para);
 % save(fullfile(para.dir.save_recon_img_mat_dir,para.dir.save_recon_img_name),'Image_PD','-append')
 
 %% cut PD rays and non_steaty_state rays

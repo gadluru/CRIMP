@@ -43,9 +43,8 @@ for j=1:nSMS
             G{j} = G_pre_calculated{j};
             kSpace_cart(:,:,:,:,:,:,j) = GROG.GROG_Dictionary_interp_new(kSpace_radial_temp,G_pre_calculated{j}.Gx,G_pre_calculated{j}.Gy,kx_temp,ky_temp);
         else
-            G{j} = GROG.GNUFFT_init(kSpace_radial_temp,kx_temp,ky_temp,over_sampling,core_size);
-            kSpace_cart(:,:,:,:,:,:,j) = GROG.GNUFFT_rad2cart(kSpace_radial_temp,G{j});
-           
+            [G{j}.Gx, G{j}.Gy] = GROG.get_Gx_Gy(kSpace_radial_temp, kx_temp, ky_temp);
+            kSpace_cart(:,:,:,:,:,:,j) = GROG.GROG_Dictionary_interp_new(kSpace_radial_temp,G{j}.Gx,G{j}.Gy,kx_temp,ky_temp);
         end
 
     end

@@ -14,7 +14,7 @@ switch para.Recon.type
             fidelity_update_temp = zeros(siz,class(fidelity_update));
             fidelity_update = fidelity_update(Data.mask);
             fidelity_update = Data.kSpace(:,i) - fidelity_update;
-            fidelity_norm = fidelity_norm + sum(abs(fidelity_update(:)).^2/prod(para.Recon.kSpace_size)/64);
+            fidelity_norm = fidelity_norm + sum(abs(fidelity_update(:)).^2/prod(para.Recon.kSpace_size));
             fidelity_update_temp(Data.mask) = fidelity_update;
 
             fidelity_update = fidelity_update_temp;clear fidelity_update_temp
