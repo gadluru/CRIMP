@@ -65,7 +65,7 @@ for iter_no = 1:para.Recon.noi
     
 %% line search
     if isfield(Data, 'Y')
-        para.Cost = Cost_STCR_step_3(fidelity_norm, new_img_x, weight_sTV, weight_tTV, Data.llr, Data.first_guess + Data.Y, weight_l2, para.Cost);
+        para.Cost = Cost_STCR_step_3(fidelity_norm, gather(new_img_x), weight_sTV, weight_tTV, Data.llr, Data.first_guess + Data.Y, weight_l2, para.Cost);
     else
         para.Cost = Cost_STCR_step_2(fidelity_norm, new_img_x, weight_sTV, weight_tTV, Data.llr, para.Cost);
     end

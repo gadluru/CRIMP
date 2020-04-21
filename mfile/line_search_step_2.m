@@ -14,7 +14,7 @@ for i=1:max_try
     new = old + step_size*update;
     fidelity_new = compute_fidelity_for_line_search_yt(sr_forward(new,Data.size),Data,para);
     if isfield(Data, 'Y')
-        cost_new = Cost_STCR_step_3(fidelity_new, new, para.Recon.weight_sTV, para.Recon.weight_tTV, Data.llr, Data.first_guess + Data.Y, para.Recon.weight_l2);
+        cost_new = Cost_STCR_step_3(fidelity_new, gather(new), para.Recon.weight_sTV, para.Recon.weight_tTV, Data.llr, Data.first_guess + Data.Y, para.Recon.weight_l2);
     else
         cost_new = Cost_STCR_step_2(fidelity_new, new, para.Recon.weight_sTV, para.Recon.weight_tTV, Data.llr);
     end
