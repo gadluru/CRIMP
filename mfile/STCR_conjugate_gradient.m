@@ -10,27 +10,6 @@ weight_sTV     = para.Recon.weight_sTV;
 beta_sqrd      = para.beta_square;
 para.step_size = para.step_size(1);
 
-if isfield(para.Recon,'RF_frames')
-    if sum(para.Recon.RF_frames)~=0
-        RF_frames = para.Recon.RF_frames;
-        PD_frames = para.Recon.PD_frames;
-        Data.first_est = Data.first_est(:,:,RF_frames,:,:);
-        Data.kSpace = Data.kSpace(:,:,RF_frames,:,:,:,:);
-        if isfield(Data,'mask')
-            Data.mask = Data.mask(:,:,RF_frames,:,:,:,:);
-        end
-        if isfield(Data,'phase_mod')
-            Data.phase_mod = Data.phase_mod(:,:,RF_frames,:,:,:,:);
-        end
-    else
-        Image = [];
-        return
-    end
-elseif isfield(para.Recon,'PD_frames') && sum(para.Recon.PD_frames) == length(para.Recon.PD_frames)
-    Image = [];
-    return
-end
-
 if isfield(Data,'first_guess')
     new_img_x = Data.first_guess;   
 else
@@ -96,7 +75,7 @@ for iter_no = 1:para.Recon.noi
         showImage(new_img_x,para.Cost)
     end
 
-%% break when step size too small or cost not changing too much
+%% stop criteria
     if para.Recon.break && iter_no > 1
         if step_size<1e-4 %|| abs(para.Cost.totalCost(end) - para.Cost.totalCost(end-1))/para.Cost.totalCost(end-1) < 1e-4
             break
@@ -112,4 +91,5 @@ end
 
 Image = squeeze(gather(new_img_x));
 para.Recon.time_total = sum(para.Recon.time);
+figure, plotCost(para.Cost);
 fprintf(['Iterative reconstruction running time is ' num2str(para.Recon.time_total) 's' '\n'])

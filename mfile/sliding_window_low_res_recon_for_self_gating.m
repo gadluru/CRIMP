@@ -6,6 +6,7 @@ function [Image, para] = sliding_window_low_res_recon_for_self_gating(kSpace,par
 sx = size(kSpace,1);
 no_comp = size(kSpace,3);
 nset = max(para.kSpace_info.set(:))+1;
+nor_sl = 6;
 
 for i=1:nset
     set = para.kSpace_info.set==i-1;
@@ -16,7 +17,6 @@ for i=1:nset
     
     nor_one_frame = para.nor_sl;
     nor_total = size(kSpace_radial,2);
-    nor_sl = 6;
     
     nof = floor((nor_total-(nor_one_frame-nor_sl))/nor_sl);
     nor_total = nof*nor_sl+(nor_one_frame-nor_sl);

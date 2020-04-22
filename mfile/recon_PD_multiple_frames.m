@@ -10,18 +10,18 @@ para.kSpace_info = kSpace_info;
 
 para.Recon.nSMS = max(kSpace_info.phase_mod(:))+1;
 kCenter = para.kSpace_center;
-para.setting.plot = 1;
+% para.setting.plot = 1;
+% para.setting.ifGPU = 0;
 
 nset = max(kSpace_info.set(:))+1;
+nor_sl = para.nor_sl;
 
-%% recon reference 
+%% pre-interpolation
 for i=1:nset
     set = kSpace_info.set==i-1;
     kSpace_radial = kSpace_all(:,set,:);
     theta = kSpace_info.angle_mod(set);
     phase = kSpace_info.phase_mod(set);
-
-    nor_sl = para.nor_sl;
     
     nor_total = size(kSpace_radial,2);
     nof = floor(nor_total/nor_sl);
@@ -52,14 +52,13 @@ end
 siz = size(Data{1}.first_est);
 siz(4) = nset;
 Image_PD = zeros(siz,'single');
-% para.setting.ifGPU = 0;
 
+%% reconstruction
 for i=1:nset
     fprintf(sprintf('SMS slice group %g\n', i))
     scale = max(abs(Data{i}.first_est(:)));
     para.Recon.weight_tTV = scale*0.05;
     para.Recon.weight_sTV = scale*0.008;
-    para.setting.plot = 0;
     para.Recon.type = 'seperate SMS test';
     para.Recon.noi = 150;
     for j=1:para.Recon.no_comp

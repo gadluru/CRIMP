@@ -91,10 +91,10 @@ kSpace_info.angle_mod = para.kSpace_info.angle_mod(1:2016);
 kSpace_info.phase_mod = para.kSpace_info.phase_mod(1:2016);
 %
 %% recon reference image for self-gating
-% Image = sliding_window_low_res_recon_for_self_gating(kSpace,para);
+Image = sliding_window_low_res_recon_for_self_gating(kSpace,para);
 % save('temp1.mat','Image')
 %% slef-gating 
-load('temp1.mat','Image')
+% load('temp1.mat','Image')
 [cardiac_signal, resp_signal, para.mask] = get_cardiac_signal_SPGR(Image);
 para.Recon.self_gating.resp_signal = resp_signal;
 para.Recon.self_gating.cardiac_signal = cardiac_signal;
