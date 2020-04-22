@@ -95,6 +95,6 @@ end
 
 Image = squeeze(gather(new_img_x));
 para.Recon.time_total = sum(para.Recon.time);
-figure, plotCost(para.Cost);
+figure, plotCost(para.Cost); drawnow
 fprintf(['Iterative reconstruction running time is ' num2str(para.Recon.time_total) 's' '\n'])
 end

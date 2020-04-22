@@ -82,13 +82,13 @@ clear *temp* i*
 para.G = G;
 
 % truncate k-space for testing
-kSpace = kSpace(:,1:2016,:);
-para.kSpace_info.set = para.kSpace_info.set(1:2016);
-para.kSpace_info.angle_mod = para.kSpace_info.angle_mod(1:2016);
-para.kSpace_info.phase_mod = para.kSpace_info.phase_mod(1:2016);
-kSpace_info.set = para.kSpace_info.set(1:2016);
-kSpace_info.angle_mod = para.kSpace_info.angle_mod(1:2016);
-kSpace_info.phase_mod = para.kSpace_info.phase_mod(1:2016);
+% kSpace = kSpace(:,1:2016,:);
+% para.kSpace_info.set = para.kSpace_info.set(1:2016);
+% para.kSpace_info.angle_mod = para.kSpace_info.angle_mod(1:2016);
+% para.kSpace_info.phase_mod = para.kSpace_info.phase_mod(1:2016);
+% kSpace_info.set = para.kSpace_info.set(1:2016);
+% kSpace_info.angle_mod = para.kSpace_info.angle_mod(1:2016);
+% kSpace_info.phase_mod = para.kSpace_info.phase_mod(1:2016);
 %
 %% recon reference image for self-gating
 Image = sliding_window_low_res_recon_for_self_gating(kSpace,para);
