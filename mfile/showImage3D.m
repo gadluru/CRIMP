@@ -7,7 +7,7 @@ im = Image(:,:,[frame_num, frame_num*2, frame_num*3],round(nz/2));
 im = permute(im,[1 3 2]);
 im = reshape(im,[nx*3 ny]);
 
-figure(1)
+figure(100)
 subplot(1,2,1)
 imagesc(im)
 colormap gray
