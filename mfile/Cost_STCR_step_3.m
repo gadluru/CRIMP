@@ -9,7 +9,7 @@ if tWeight ~= 0
     tNorm = sum(tNorm(:))*0.5;
     Image_temp = permute(Image,[1,2,4,3]);
     patch_all = Image_temp(llr.idx);  
-    tNorm2 = tWeight .* diff(patch_all, 1, 2);
+    tNorm2 = tWeight .* diff(patch_all, 1, 2)*0.5;
     tNorm = tNorm + sum(abs(tNorm2(:)));
 else
     tNorm = 0;

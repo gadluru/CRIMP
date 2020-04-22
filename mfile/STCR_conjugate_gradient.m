@@ -1,4 +1,4 @@
-function [Image,para] = STCR_conjugate_gradient_low_rank_bins(Data,para)
+function [Image,para] = STCR_conjugate_gradient(Data,para)
 %[Image,para] = STCR_conjugate_gradient(Data,para)
 disp('Performing iterative STCR reconstruction...');
 disp('Showing progress...')
@@ -74,15 +74,10 @@ for iter_no = 1:para.Recon.noi
 
 %% fidelity term/temporal/spatial TV
     [update_term,fidelity_norm] = fidelity(new_img_x);
-    update_term = update_term + temporal(new_img_x)*.75;
+    update_term = update_term + temporal(new_img_x);
     update_term = update_term + spatial(new_img_x);
 
-    if isfield(para.Recon,'bins')
-        update_term = update_term + compute_tTV_bins(new_img_x,weight_tTV,beta_sqrd,para.Recon.bins)*.5;
-    end
-
 %% conjugate gradient
-
     if iter_no > 1
         beta = update_term(:)'*update_term(:)/(update_term_old(:)'*update_term_old(:)+eps('single'));
         update_term = update_term + beta*update_term_old;

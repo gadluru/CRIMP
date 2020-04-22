@@ -67,7 +67,7 @@ for i=1:nset
         kSpace(:,j) = k_temp(Data{i}.mask);
     end
     Data{i}.kSpace = kSpace;
-    Image_PD(:,:,:,i,:) = STCR_conjugate_gradient_low_rank_bins(Data{i},para);
+    Image_PD(:,:,:,i,:) = STCR_conjugate_gradient(Data{i},para);
     clear kSpace
 end
 
