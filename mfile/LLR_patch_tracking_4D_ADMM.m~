@@ -6,12 +6,12 @@ disp('Showing progress...')
 para.Recon.weight_l2 = 0.01;
 Image = STCR_conjugate_gradient_MSMS_ADMM(Data,para);
 
-Data.Y = zeros(size(Data.first_guess));
+Data.Y = zeros(size(Data.first_guess), 'single');
 
 for ADMM_iter = 1:2
     %% ADMM update step 2
     % motion tracked patches
-    Image_mc_lr = patch_low_rank_only(Image + Data.Y,Data.llr);
+    Image_mc_lr = patch_low_rank_only(Image + Data.Y, Data.llr);
     Image_mc_lr = permute(Image_mc_lr,[1,2,4,3]);
     
     % not moving patches

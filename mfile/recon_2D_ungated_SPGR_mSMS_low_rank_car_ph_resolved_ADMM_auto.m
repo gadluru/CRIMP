@@ -48,7 +48,7 @@ non_steady_state_rays = 360;
 para.trajectory_correction = RING_SMS(kSpace(:,set,:), kSpace_info.angle_mod(set), nSMS);
 
 %% reconstruct proton density (PD) weighted images
-Image_PD = recon_PD_multiple_frames(kSpace(:,1:kSpace_info.PD_rays,:),kSpace_info,para);
+% Image_PD = recon_PD_multiple_frames(kSpace(:,1:kSpace_info.PD_rays,:),kSpace_info,para);
 % save(fullfile(para.dir.save_recon_img_mat_dir,para.dir.save_recon_img_name),'Image_PD','-append')
 
 %% cut PD rays and non_steaty_state rays
@@ -63,7 +63,7 @@ para.kSpace_info = kSpace_info;
 fprintf('Estimate SMS-GROG operator...\n')
 for iset=1:nset
     tic
-    fprintf(sprintf('SMS slice group %g\n', i))
+    fprintf(sprintf('SMS slice group %g\n', iset))
     set_idx = kSpace_info.set==iset-1;
     kSpace_temp = kSpace(:,set_idx,:);
     theta_temp = kSpace_info.angle_mod(set_idx);

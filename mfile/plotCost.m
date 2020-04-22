@@ -18,11 +18,13 @@ if Cost.spatialNorm(end)
     legend([lgd(1:end-1),'Spatial Norm'])
 end
 if isfield(Cost, 'l2Norm')
-    if Cost.l2Norm(end)
-        plot(Cost.spatialNorm,'.-','LineWidth',2,'MarkerSize',15);
-        lgd = get(gca,'Legend');
-        lgd = lgd.String;
-        legend([lgd(1:end-1),'L2 Norm'])
+    if ~isempty(Cost.l2Norm)
+        if Cost.l2Norm(end)
+            plot(Cost.l2Norm,'.-','LineWidth',2,'MarkerSize',15);
+            lgd = get(gca,'Legend');
+            lgd = lgd.String;
+            legend([lgd(1:end-1),'L2 Norm'])
+        end
     end
 end
 xlabel 'Iteration Number'

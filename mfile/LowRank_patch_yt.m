@@ -19,11 +19,11 @@ if patch_begin_z(end) + patch_size(3) -1 > siz(3)
     patch_begin_z(end) = siz(3) - patch_size(3) + 1;
 end
 
-Image_lr = zeros(size(Image));
+Image_lr = zeros(size(Image), 'single');
 
 for nphase = 1:siz(5)
     Image_phase = Image(:,:,:,:,nphase);
-    Image_lr_phase = zeros(siz(1:4),'single');
+    Image_lr_phase = zeros(siz(1:4), 'single');
     Mask = Image_lr_phase;
     
     for nx = patch_begin_x
@@ -32,7 +32,7 @@ for nphase = 1:siz(5)
                 patch_temp = Image_phase(nx:nx+patch_size(1)-1,ny:ny+patch_size(2)-1,nz:nz+patch_size(3)-1,:);
                 patch_temp = reshape(patch_temp,[prod(patch_size),siz(4)]);
                 [U,S,V] = svd(patch_temp,0);
-                S = S - S(1)*0.02;
+                S = S - 20;
                 S(S<0) = 0;
                 patch_temp = U*S*V';
                 patch_temp = reshape(patch_temp,[patch_size,siz(4)]);

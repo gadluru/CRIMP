@@ -6,7 +6,7 @@ update = zeros(size(Image),'like',Image);
 
 for i=1:llr.Npatch
     [u,s,v] = svd(patch_all(:,:,i),0);
-    s = s-s(end);
+    s = s-20;
     s(s<0) = 0;
     update(llr.idx(:,:,i)) = update(llr.idx(:,:,i)) + u*s*v';
 end

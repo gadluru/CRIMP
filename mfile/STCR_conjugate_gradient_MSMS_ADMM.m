@@ -11,10 +11,10 @@ beta_sqrd      = para.beta_square;
 para.step_size = para.step_size(1);
 weight_l2      = para.Recon.weight_l2;
 
-if isfield(Data,'first_guess')
-    new_img_x = Data.first_guess;   
-else
+if isfield(Data,'first_est')
     new_img_x = single(Data.first_est);
+else
+    new_img_x = Data.first_guess;
 end
 
 if isfield(Data,'sens_map')
@@ -32,7 +32,7 @@ if ifGPU
     if isfield(Data,'filter')
         Data.filter        = gpuArray(Data.filter);
     end
-    beta_sqrd = gpuArray(beta_sqrd);
+%     beta_sqrd = gpuArray(beta_sqrd);
 end
 
 para.Cost = struct('fidelityNorm',[],'temporalNorm',[],'spatialNorm',[],'l2Norm',[],'totalCost',[]);
@@ -65,7 +65,7 @@ for iter_no = 1:para.Recon.noi
     
 %% line search
     if isfield(Data, 'Y')
-        para.Cost = Cost_STCR_step_3(fidelity_norm, gather(new_img_x), weight_sTV, weight_tTV, Data.llr, Data.first_guess + Data.Y, weight_l2, para.Cost);
+        para.Cost = Cost_STCR_step_3(fidelity_norm, gather(new_img_x), weight_sTV, weight_tTV, Data.llr, Data.first_guess - Data.Y, weight_l2, para.Cost);
     else
         para.Cost = Cost_STCR_step_2(fidelity_norm, new_img_x, weight_sTV, weight_tTV, Data.llr, para.Cost);
     end
@@ -74,6 +74,7 @@ for iter_no = 1:para.Recon.noi
     para.step_size(iter_no) = step_size;
 
     new_img_x = new_img_x + step_size * update_term_old;
+    update_term_old = gather(update_term_old);
 
 %% plot&save part 
     if ifplot == 1
