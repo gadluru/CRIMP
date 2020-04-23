@@ -74,3 +74,4 @@ Image_PD = abs(crop_half_FOV(Image_PD(:,:,:,:)));
 Image_PD = squeeze(Image_PD);
 order = vec((1:nset)'+([1,para.Recon.nSMS:-1:2]-1)*nset);
 Image_PD = Image_PD(:,:,:,order);
+Image_PD = permute(Image_PD, [1,2,4,3]);
