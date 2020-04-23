@@ -189,18 +189,18 @@ para.setting.ifGPU = 0;
 para.Recon.noi = 30;
 clearvars -except Data_all para
 %% ADMM solver
-im_bin = LLR_patch_tracking_4D_ADMM(Data_all,para);
+Image = LLR_patch_tracking_4D_ADMM(Data_all,para);
 
 %% save reconstructed images
-im_bin = permute(im_bin,[1,2,4,3]);
-im_bin = abs(crop_half_FOV(im_bin));
+Image = permute(Image,[1,2,4,3]);
+Image = abs(crop_half_FOV(Image));
 save(fullfile(para.dir.save_recon_img_mat_dir,para.dir.save_recon_img_name),'im_bin','para','-append')
 
-Image_sys = im_bin(:,:,:,para.Recon.bins(1,:));
+Image_sys = Image(:,:,:,para.Recon.bins(1,:));
 save(fullfile(para.dir.save_recon_img_mat_dir,para.dir.save_recon_img_name),'Image_sys','-append')
 
 dia_loc = round((size(para.Recon.bins,1)+1)/2);
-Image_dia = im_bin(:,:,:,para.Recon.bins(dia_loc,:));
+Image_dia = Image(:,:,:,para.Recon.bins(dia_loc,:));
 save(fullfile(para.dir.save_recon_img_mat_dir,para.dir.save_recon_img_name),'Image_dia','-append')
 
 return
