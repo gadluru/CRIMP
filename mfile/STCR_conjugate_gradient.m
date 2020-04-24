@@ -24,8 +24,8 @@ function [Image,para] = STCR_conjugate_gradient(Data,para)
 %           para.Recon              [structure]
 %               Recon.weight_tTV    [scalar]
 %               Recon.weight_sTV    [scalar]
-%           para.Recon.epsilon      [scalar]
-%           para.Recon.step_size    [scalar]
+%               Recon.epsilon       [scalar]
+%               Recon.step_size     [scalar]
 %
 %       - Data
 %           Data.kSpace             measured k-space data "d"
@@ -38,7 +38,7 @@ function [Image,para] = STCR_conjugate_gradient(Data,para)
 %           para.setting.ifGPU      run function on a NVIDIA GPU
 %           para.Recon.weight_tTV   "lambda_t"
 %           para.Recon.weight_sTV   "lambda_s"
-%           para.epsilon            "epsilon"
+%           para.Recon.epsilon      "epsilon"
 %           para.Recon.step_size    initial CG update step size
 %--------------------------------------------------------------------------
 %   Output:
@@ -88,10 +88,6 @@ if isfield(Data,'first_guess')
     new_img_x = Data.first_guess;   
 else
     new_img_x = single(Data.first_est);
-end
-
-if isfield(Data,'phase_mod')
-    Data.phase_mod_conj = conj(single(Data.phase_mod));
 end
 
 if isfield(Data,'sens_map')
