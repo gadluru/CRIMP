@@ -56,7 +56,7 @@ Image_PD = zeros(siz,'single');
 %% reconstruction
 %  global reconstruction parameters
 para.Recon.type = 'seperate SMS test';
-para.Recon.noi = 150;
+para.Recon.noi = 100;
 
 for i=1:nset
     fprintf(sprintf('SMS slice group %g\n', i))

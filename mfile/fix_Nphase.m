@@ -125,7 +125,7 @@ for i=1:nset
         
         % interp resp_signal
         resp_signal_temp = resp_signal(frame_temp);
-        resp_signal_reorder(Ns2d+1:Nphase,icycle) = interp1(1:length(frame_temp),resp_signal_temp,1:(length(frame_temp)-1)/(Ns2d-1):length(frame_temp));
+        resp_signal_reorder(Ns2d+1:Nphase,icycle) = interp1(1:length(frame_temp),resp_signal_temp,1:(length(frame_temp)-1)/(Nd2s-1):length(frame_temp));
         
     end
     

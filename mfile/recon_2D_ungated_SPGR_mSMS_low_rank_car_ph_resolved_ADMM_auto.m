@@ -224,7 +224,7 @@ patch_shift = [5,5,2];
 Nphase = size(para.Recon.bins,1);
 Data_all.llr = Patch_tracking_3D_with_guide_random_search(Data_all.first_guess,Nphase,Data_all.shifts,patch_size,search_size,patch_shift);
 
-para.setting.ifGPU = 0;
+% para.setting.ifGPU = 0;
 para.Recon.noi = 30;
 clearvars -except Data_all para
 %% ADMM solver
