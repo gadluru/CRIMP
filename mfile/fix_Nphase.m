@@ -31,7 +31,7 @@ set(gca, 'FontSize', 16)
 
 %% 
 nor_sl = 6;
-nor_one_frame = para.nor_sl;
+nor_one_frame = para.Recon.nor_sl;
 para.Recon.nor = nor_one_frame;
 ray_idx_start_sys = (sys-1)*nor_sl+1;
 

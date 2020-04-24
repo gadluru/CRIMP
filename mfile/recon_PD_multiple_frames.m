@@ -9,12 +9,12 @@ para.kSpace_info = kSpace_info;
 [sx,nor_all,no_comp] = size(kSpace_all);
 
 para.Recon.nSMS = max(kSpace_info.phase_mod(:))+1;
-kCenter = para.kSpace_center;
-% para.setting.plot = 1;
+kCenter = para.Recon.kSpace_center;
+% para.setting.ifplot = 1;
 % para.setting.ifGPU = 0;
 
 nset = max(kSpace_info.set(:))+1;
-nor_sl = para.nor_sl;
+nor_sl = para.Recon.nor_sl;
 
 %% pre-interpolation
 Data = cell(1, nset);

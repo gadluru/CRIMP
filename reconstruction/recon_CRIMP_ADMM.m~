@@ -13,7 +13,7 @@ para.Recon.noi = 30; % number of iterations. This is changed several times durin
 para.Recon.kSpace_center = 145; % k-space center point along readout
 para.weight_sTV = 0.00; % spatial constraint weight
 para.weight_tTV = 0.04; % temporal constraint weight
-para.Recon.nor_sl = 12; % number of sliding window rays
+para.nor_sl = 12; % number of sliding window rays
 para.setting.ifGPU = 1; % you need a Nvidia GPU memory of ~24Gb, otherwise set to 0
 para.setting.ifplot = 1; % show process during reconstruction
 

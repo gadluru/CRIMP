@@ -32,8 +32,6 @@ function recon_2D_ungated_SPGR_mSMS_low_rank_car_ph_resolved_ADMM_auto(para)
 %           para.weight_tTV                 [scalar]
 %           para.time                       [string]
 %
-%               'nor'   number of totally acquired rays
-%
 %       - para.dir.load_kSpace*             raw k-space name and directory
 %       - para.dir.save_recon_img*          where to save final image
 %       - para.setting.ifGPU                whether to run on a NVIDIA GPU
@@ -55,12 +53,8 @@ function recon_2D_ungated_SPGR_mSMS_low_rank_car_ph_resolved_ADMM_auto(para)
 %   Type 'help STCR_conjugate_gradient' for more information about the
 %   reconstruction settings.
 %--------------------------------------------------------------------------
-%   Reference:
-%       [1] Whole-heart, ungated, free-breathing, cardiac-phase-resolved 
-%           myocardial perfusion MRI by using Continuous Radial Interleaved
-%           simultaneous Multi-slice acquisitions at sPoiled steady-state 
-%           (CRIMP). MRM, in press.
-%--------------------------------------------------------------------------
+%
+%
 %   Author:
 %       Ye Tian
 %       E-mail: phye1988@gmail.com
@@ -233,7 +227,7 @@ Image = LLR_patch_tracking_4D_ADMM(Data_all,para);
 %% save reconstructed images
 Image = permute(Image,[1,2,4,3]);
 Image = abs(crop_half_FOV(Image));
-save(fullfile(para.dir.save_recon_img_dir,para.dir.save_recon_img_name),'Image','para','-append')
+save(fullfile(para.dir.save_recon_img_dir,para.dir.save_recon_img_name),'im_bin','para','-append')
 
 Image_sys = Image(:,:,:,para.Recon.bins(1,:));
 save(fullfile(para.dir.save_recon_img_dir,para.dir.save_recon_img_name),'Image_sys','-append')

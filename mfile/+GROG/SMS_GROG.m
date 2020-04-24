@@ -17,14 +17,9 @@ function [kSpace_cart,G] = SMS_GROG(kSpace_radial, kx, ky, phase_mod, para, G_pr
 % Contact:
 % Ye Tian, phye1988@gmail.com
 
-
-
-
 nSMS = max(phase_mod(:))+1;
 
 [sx,nor,nof,nc,~,NSlice] = size(kSpace_radial);
-core_size = para.core_size;
-over_sampling = para.over_sampling;
 
 G = cell(1,nSMS);
 
@@ -52,7 +47,7 @@ end
 
 sx_over = size(kSpace_cart,1);
 kSpace_cart = reshape(kSpace_cart,[sx_over,sx_over,nof,nc,1,NSlice,nSMS]);
-if size(kSpace_cart,1)~=sx*over_sampling
+if size(kSpace_cart,1)~=sx
     kSpace_cart([1,end],:,:,:,:,:,:) = [];
     kSpace_cart(:,[1,end],:,:,:,:,:) = [];
 end

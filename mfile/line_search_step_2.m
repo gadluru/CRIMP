@@ -1,6 +1,6 @@
 function step_size = line_search_step_2(old,update,Data,para)
 
-step_start = para.step_size(end)*1.3;% magic number
+step_start = para.Recon.step_size(end)*1.3;% magic number
 tau = 0.8;
 max_try = 15;
 step_size = step_start;

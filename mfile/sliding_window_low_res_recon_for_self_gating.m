@@ -12,10 +12,10 @@ for i=1:nset
     set = para.kSpace_info.set==i-1;
 
     kSpace_radial = kSpace(:,set,:);
-    theta = para.angle_mod(set);
+    theta = para.kSpace_info.angle_mod(set);
     phase = para.kSpace_info.phase_mod(set);
     
-    nor_one_frame = para.nor_sl;
+    nor_one_frame = para.Recon.nor_sl;
     nor_total = size(kSpace_radial,2);
     
     nof = floor((nor_total-(nor_one_frame-nor_sl))/nor_sl);

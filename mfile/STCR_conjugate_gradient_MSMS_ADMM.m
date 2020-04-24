@@ -22,14 +22,14 @@ function [Image,para] = STCR_conjugate_gradient_MSMS_ADMM(Data,para)
 %           
 %       - para                      [structure]
 %           para.setting            [structure]
-%               setting.plot        [0 or 1]
+%               setting.ifplot        [0 or 1]
 %               setting.ifGPU       [0 or 1]
 %           para.Recon              [structure]
 %               Recon.weight_tTV    [scalar]
 %               Recon.weight_sTV    [scalar]
 %               Recon.weight_l2     [scalar]
-%           para.beta_sqrd          [scalar]
-%           para.step_size          [scalar]
+%           para.epsilon          [scalar]
+%           para.Recon.step_size          [scalar]
 %
 %       - Data
 %           Data.kSpace             measured k-space data "d"
@@ -38,13 +38,13 @@ function [Image,para] = STCR_conjugate_gradient_MSMS_ADMM(Data,para)
 %           Data.first_guess        "Phat"
 %
 %       -para
-%           para.setting.plot       display reconstruction process
+%           para.setting.ifplot       display reconstruction process
 %           para.setting.ifGPU      run function on a NVIDIA GPU
 %           para.Recon.weight_tTV   "lambda_t"
 %           para.Recon.weight_sTV   "lambda_s"
 %           para.Recon.weight_l2    "rho"
-%           para.beta_sqrd          "epsilon"
-%           para.step_size          initial CG update step size
+%           para.epsilon          "epsilon"
+%           para.Recon.step_size          initial CG update step size
 %--------------------------------------------------------------------------
 %   Output:
 %       - Image     [sx, sy, nof, ...]
@@ -88,12 +88,12 @@ function [Image,para] = STCR_conjugate_gradient_MSMS_ADMM(Data,para)
 disp('Performing iterative CG reconstruction...');
 disp('Showing progress...')
 
-ifplot         = para.setting.plot;
+ifplot         = para.setting.ifplot;
 ifGPU          = para.setting.ifGPU;
 weight_tTV     = para.Recon.weight_tTV;
 weight_sTV     = para.Recon.weight_sTV;
-beta_sqrd      = para.beta_square;
-para.step_size = para.step_size(1);
+epsilon      = para.Recon.eosilon;
+para.Recon.step_size = para.Recon.step_size(1);
 weight_l2      = para.Recon.weight_l2;
 
 if isfield(Data,'first_est')
@@ -117,13 +117,13 @@ if ifGPU
     if isfield(Data,'filter')
         Data.filter        = gpuArray(Data.filter);
     end
-%     beta_sqrd = gpuArray(beta_sqrd);
+%     epsilon = gpuArray(epsilon);
 end
 
 para.Cost = struct('fidelityNorm',[],'temporalNorm',[],'spatialNorm',[],'l2Norm',[],'totalCost',[]);
 
 fidelity = @(im) compute_fidelity_yt_new(im,Data,para);
-temporal = @(im) compute_tTV_yt(im,weight_tTV,beta_sqrd);
+temporal = @(im) compute_tTV_yt(im,weight_tTV,epsilon);
 
 for iter_no = 1:para.Recon.noi
     t1 = tic;
@@ -134,7 +134,7 @@ for iter_no = 1:para.Recon.noi
     update_term = update_term + temporal(new_img_x)*0.5;
 
     update_patch = patch_ttv(gather(new_img_x),Data.llr,para)*0.5;
-    update_bins = compute_tTV_bins_no_lr(gather(new_img_x),weight_tTV,beta_sqrd,para.Recon.bins)*0.5;
+    update_bins = compute_tTV_bins_no_lr(gather(new_img_x),weight_tTV,epsilon,para.Recon.bins)*0.5;
     update_bins(permute(Data.llr.mask,[1,2,4,3])) = update_patch(permute(Data.llr.mask,[1,2,4,3]));
     update_term = update_term + update_bins; clear update_bins update_patch
     if isfield(Data, 'Y')
@@ -156,7 +156,7 @@ for iter_no = 1:para.Recon.noi
     end
     clear fidelity_update
     step_size = line_search_step_2(new_img_x,update_term_old,Data,para);
-    para.step_size(iter_no) = step_size;
+    para.Recon.step_size(iter_no) = step_size;
 
     new_img_x = new_img_x + step_size * update_term_old;
     update_term_old = gather(update_term_old);

@@ -1,6 +1,6 @@
-function [sTV_update] = compute_sTV_yt(img, weight, beta_sqrd)
+function [sTV_update] = compute_sTV_yt(img, weight, epsilon)
 %--------------------------------------------------------------------------
-%   [tTV_update] = compute_tTV_yt(img, weight, beta_sqrd)
+%   [tTV_update] = compute_tTV_yt(img, weight, epsilon)
 %--------------------------------------------------------------------------
 %   Compute the gradient of temporal total variation (3rd dimension)
 %--------------------------------------------------------------------------
@@ -34,8 +34,8 @@ if weight~=0
     T3_num = cat(1,diff_y,zeros([1,siz(2:end)]));
     T4_num = cat(1,zeros([1,siz(2:end)]),diff_y); clear diff_y
 
-    T1_den = sqrt(beta_sqrd + abs(T1_num).^2 + (abs((T3_num+T4_num)/2).^2)); clear T4_num
-    T3_den = sqrt(beta_sqrd + abs(T3_num).^2 + (abs((T1_num+T2_num)/2).^2)); clear T2_num
+    T1_den = sqrt(epsilon + abs(T1_num).^2 + (abs((T3_num+T4_num)/2).^2)); clear T4_num
+    T3_den = sqrt(epsilon + abs(T3_num).^2 + (abs((T1_num+T2_num)/2).^2)); clear T2_num
 
     T1 = T1_num./T1_den; clear T1_den T1_num
     T3 = T3_num./T3_den; clear T3_den T3_num
