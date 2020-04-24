@@ -1,5 +1,37 @@
-function step_size = line_search(old,update,Data,para)
-
+function step_size = line_search(old, update, Data, para)
+%--------------------------------------------------------------------------
+%   [step] = line_search(old, update, Data, para)
+%--------------------------------------------------------------------------
+%   Line search called in a conjugate gradient algorithm
+%--------------------------------------------------------------------------
+%   Inputs:      
+%       - old       [sx, sy, nof, ...]
+%       - update    [sx, sy, nof, ...]
+%       - Data      [structure]
+%       - para      [structure]
+%               
+%       - old       image from previous iteration
+%       - update    update term
+%       - Data      see 'help STCR_conjugate_gradient.m'
+%       - para      see 'help STCR_conjugate_gradient.m'
+%--------------------------------------------------------------------------
+%   Output:
+%       - step      [scalar]
+%
+%       - step      step size for CG update
+%--------------------------------------------------------------------------
+%   This function trys to find a suitable step size to perform a CG update.
+%   The function starts with a step size adopted from last iteration, and
+%   multiply it by 1.3 (magic number). If the step size yeilds a cost that
+%   is larger than the previous cost, it shrinks the step size by 0.8
+%   (magic number again). If it yeilds a cost that is smaller than the
+%   previous cost, it will increase the step size by 1.3 until it no longer
+%   yeild a smaller cost. The maximum number of trys is 15.
+%--------------------------------------------------------------------------
+%   Author:
+%       Ye Tian
+%       E-mail: phye1988@gmail.com
+%--------------------------------------------------------------------------
 step_start = para.step_size(end)*1.3;%magic number
 tau = 0.8;
 max_try = 15;

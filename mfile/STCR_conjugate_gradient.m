@@ -1,5 +1,79 @@
 function [Image,para] = STCR_conjugate_gradient(Data,para)
-%[Image,para] = STCR_conjugate_gradient(Data,para)
+%--------------------------------------------------------------------------
+%   [Image,para] = STCR_conjugate_gradient(Data,para)
+%--------------------------------------------------------------------------
+%   Solve MRI reconstruction problem using a conjugate gradient method.
+%--------------------------------------------------------------------------
+%   Inputs (for a 2D dynamic radial case):
+%       - Data                      [structure] 
+%           Data.kSpace             [sx, nor, nof, nc]
+%           Data.sens_map           [1,  1,   1,   nc]
+%           Data.first_est          [sx, sy,  nof]
+%           Data.N                  [NUFFT structure]
+%
+%               'sx'    number of readout point along a ray
+%               'sy'    for radial k-space, same as sx
+%               'nor'   number of rays per time frame
+%               'nof'   number of time frames
+%               'nc'    number of coils
+%           
+%       - para                      [structure]
+%           para.setting            [structure]
+%               setting.plot        [0 or 1]
+%               setting.ifGPU       [0 or 1]
+%           para.Recon              [structure]
+%               Recon.weight_tTV    [scalar]
+%               Recon.weight_sTV    [scalar]
+%           para.beta_sqrd          [scalar]
+%           para.step_size          [scalar]
+%
+%       - Data
+%           Data.kSpace             measured k-space data "d"
+%           Data.sens_map           sensitivity map
+%           Data.first_est          initial estimation of "x"
+%           Data.N                  NUFFT structure (see +NUFFT)
+%
+%       -para
+%           para.setting.plot       display reconstruction process
+%           para.setting.ifGPU      run function on a NVIDIA GPU
+%           para.Recon.weight_tTV   "lambda_t"
+%           para.Recon.weight_sTV   "lambda_s"
+%           para.beta_sqrd          "epsilon"
+%           para.step_size          initial CG update step size
+%--------------------------------------------------------------------------
+%   Output:
+%       - Image     [sx, sy, nof, ...]
+%       - para      [structure]
+%
+%       - Image     reconstructed images "m"
+%--------------------------------------------------------------------------
+%   A standard cost function it solves is the spatially and temporally
+%   constrained reconstruction (STCR):
+%
+%   || Am - d ||_2^2 + lambda_t || TV_t m ||_1 + lambda_s || TV_s m ||_1
+%
+%   "A"         sampling matrix includes sensitivity maps, Fourier 
+%               transform, and undersampling mask
+%   "m"         image to be reconstructed
+%   "d"         measured k-space data
+%   ||.||_2^2   l2 norm
+%   ||.||_1     l1 norm
+%   "lambda_t"  temporal constraint weight
+%   "lambda_s"  sparial constraint weight
+%   TV_t        temporal total variation (TV) operator (finite difference)
+%               sqrt( abs(m_t+1 - m_t)^2 + epsilon )
+%   "epsilon"   small term to aviod singularity
+%   TV_s        spatial TV operator
+%               sqrt( abs(m_x+1 - m_x)^2 + abs(m_y+1 - m_y) + epsilon )
+%--------------------------------------------------------------------------
+%   Reference:
+%       [1]     Acquisition and reconstruction of undersampled radial data 
+%               for myocardial perfusion MRI. JMRI, 2009, 29(2):466-473.
+%--------------------------------------------------------------------------
+%   Author:
+%       Ye Tian
+%       E-mail: phye1988@gmail.com
+%--------------------------------------------------------------------------
 disp('Performing iterative STCR reconstruction...');
 disp('Showing progress...')
 

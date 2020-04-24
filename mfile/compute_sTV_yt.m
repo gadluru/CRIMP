@@ -1,7 +1,31 @@
-function sTV_update = compute_sTV_yt(img,weight,beta_sqrd)
+function [sTV_update] = compute_sTV_yt(img, weight, beta_sqrd)
+%--------------------------------------------------------------------------
+%   [tTV_update] = compute_tTV_yt(img, weight, beta_sqrd)
+%--------------------------------------------------------------------------
+%   Compute the gradient of temporal total variation (3rd dimension)
+%--------------------------------------------------------------------------
+%   Inputs:      
+%       - img           [sx, sy, nof, ~]
+%       - weight        [real scalar]
+%       - beta_sqrt     [real scaler]
+%
+%       - img           image with at least three dimensions
+%       - weight        regularization weight 
+%       - beta_sqrt     a small term to aviod singularity
+%--------------------------------------------------------------------------
+%   Output:
+%       - tTV_update    [sx, sy, nof, ~]
+%
+%       - tTV_update    gradient of 3rd dimension total variation
+%--------------------------------------------------------------------------
+%   Author:
+%       Ye Tian
+%       E-mail: phye1988@gmail.com
+%--------------------------------------------------------------------------
 
 if weight~=0
     siz = size(img);
+    
     diff_x = diff(img,1,2);
     diff_y = diff(img,1,1);
 
@@ -24,4 +48,4 @@ else
     sTV_update = 0;
 end
 
-end
+return

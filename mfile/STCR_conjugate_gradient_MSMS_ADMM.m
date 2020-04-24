@@ -1,5 +1,90 @@
 function [Image,para] = STCR_conjugate_gradient_MSMS_ADMM(Data,para)
-%[Image,para] = STCR_conjugate_gradient(Data,para)
+%--------------------------------------------------------------------------
+%   [Image,para] = STCR_conjugate_gradient_MSMS_ADMM(Data,para)
+%--------------------------------------------------------------------------
+%   Solve MRI reconstruction problem within the ADMM iteration using
+%   conjugated gradient algorithm.
+%--------------------------------------------------------------------------
+%   Inputs:
+%       - Data                      [structure] 
+%           Data.kSpace             [nm, nc]
+%           Data.sens_map           [1,  1,   1,   ns, nc]
+%           Data.first_est          [sx, sy,  nof, ns]
+%           Data.first_guess        [sx, sy,  nof, ns]
+%           Data.mask
+%
+%               'sx'    number of readout point along a ray
+%               'sy'    for radial k-space, same as sx
+%               'nm'    number of total non-zero measurements
+%               'nor'   number of rays per time frame
+%               'nof'   number of time frames
+%               'nc'    number of coils
+%           
+%       - para                      [structure]
+%           para.setting            [structure]
+%               setting.plot        [0 or 1]
+%               setting.ifGPU       [0 or 1]
+%           para.Recon              [structure]
+%               Recon.weight_tTV    [scalar]
+%               Recon.weight_sTV    [scalar]
+%               Recon.weight_l2     [scalar]
+%           para.beta_sqrd          [scalar]
+%           para.step_size          [scalar]
+%
+%       - Data
+%           Data.kSpace             measured k-space data "d"
+%           Data.sens_map           sensitivity map
+%           Data.first_est          initial estimation of "x"
+%           Data.first_guess        "Phat"
+%
+%       -para
+%           para.setting.plot       display reconstruction process
+%           para.setting.ifGPU      run function on a NVIDIA GPU
+%           para.Recon.weight_tTV   "lambda_t"
+%           para.Recon.weight_sTV   "lambda_s"
+%           para.Recon.weight_l2    "rho"
+%           para.beta_sqrd          "epsilon"
+%           para.step_size          initial CG update step size
+%--------------------------------------------------------------------------
+%   Output:
+%       - Image     [sx, sy, nof, ...]
+%       - para      [structure]
+%
+%       - Image     reconstructed images "m"
+%--------------------------------------------------------------------------
+%   A standard cost function it solves is the spatially and temporally
+%   constrained reconstruction (STCR):
+%
+%   || Am - d ||_2^2 + lambda_t || TV_t m ||_1 
+%                    + lambda_t sum_i || P_i m ||_1
+%                    + rho || Phat - m - Y ||_2^2
+%
+%   "A"         sampling matrix includes sensitivity maps, Fourier 
+%               transform, and undersampling mask
+%   "m"         image to be reconstructed
+%   "d"         measured k-space data
+%   ||.||_2^2   l2 norm
+%   ||.||_1     l1 norm
+%   "lambda_t"  temporal constraint weight
+%   TV_t        temporal total variation (TV) operator (finite difference)
+%               sqrt( abs(m_t+1 - m_t)^2 + epsilon )
+%   "epsilon"   small term to aviod singularity
+%   "rho"       l2 norm constraint weight
+%   sum_i       sum across all patches
+%   P_i         patch extraction operator
+%   "Phat"      low-rank images
+%   "Y"         ADMM Lagrangian multiplier
+%--------------------------------------------------------------------------
+%   Reference:
+%       [1] Whole-heart, ungated, free-breathing, cardiac-phase-resolved 
+%           myocardial perfusion MRI by using Continuous Radial Interleaved
+%           simultaneous Multi-slice acquisitions at sPoiled steady-state 
+%           (CRIMP). MRM, in press.
+%--------------------------------------------------------------------------
+%   Author:
+%       Ye Tian
+%       E-mail: phye1988@gmail.com
+%--------------------------------------------------------------------------
 disp('Performing iterative CG reconstruction...');
 disp('Showing progress...')
 

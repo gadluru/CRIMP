@@ -1,4 +1,4 @@
-function output = fftshift2(input)
+function in = fftshift2(in)
 
-output = fftshift(input,1);
-output = fftshift(output,2);
+in = fftshift(in,1);
+in = fftshift(in,2);

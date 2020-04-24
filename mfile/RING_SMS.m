@@ -1,24 +1,36 @@
 function S = RING_SMS(kSpace, theta, Nsms)
-% S = RING_SMS(kSpace,theta)
-%    Inputs:
-%       kSpace: radial k-space data
-%          dimention: [sx, nor, coil]
-%              sx: number of readouts along a ray
-%              nor: total number of rays in temporal order
-%              coil: number of coils (can be after coil compression)
-%       theta: projection angle
-%          dimention: [1, nor]
+%--------------------------------------------------------------------------
+%   S = RING_SMS(kSpace,theta)
+%--------------------------------------------------------------------------
+%   Estimate trajectory errors for radial SMS k-space data
+%--------------------------------------------------------------------------
+%   Inputs:      
+%       - kSpace    [sx, nor, nc]
+%       - theta     [1,  nor]
+%       - Nsms      [scalar]
 %
-% Reference:
-% Simple auto-calibrated gradient delay estimation from few spokes using
-% Radial Intersections (RING)
-% https://doi.org/10.1002/mrm.27506
+%           'sx'    number of measurements along a ray
+%           'nor'   number of rays   
+%           'nc'    number of coils
 %
-% Modified for radial SMS data in CRIMP paper
-% The code assumes Nsms = 3. Needs to be modified for more general use.
+%       - kSpace    radial SMS k-space data with CAIPI phase modulation
+%       - theta     radial k-space projection angle
+%       - Nsms      number of simultaneous multi-slice
+%--------------------------------------------------------------------------
+%   Output:
+%       - S         [2, 2]
 %
-% Author: Ye Tian phye1988@gmail.com
-%
+%       - S         gradient delay errors [Sx, Sxy; Sxy, Sy]
+%--------------------------------------------------------------------------
+%   Reference:
+%       [1] Simple auto-calibrated gradient delay estimation from few 
+%           spokes using Radial Intersections (RING). MRM, 2019, 81(3):
+%           1898-1906.
+%--------------------------------------------------------------------------
+%   Author:
+%       Ye Tian
+%       E-mail: phye1988@gmail.com
+%--------------------------------------------------------------------------
 
 N = 80; % number of rays used to calibration
 

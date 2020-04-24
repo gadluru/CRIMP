@@ -17,6 +17,7 @@ nset = max(kSpace_info.set(:))+1;
 nor_sl = para.nor_sl;
 
 %% pre-interpolation
+Data = cell(1, nset);
 for i=1:nset
     set = kSpace_info.set==i-1;
     kSpace_radial = kSpace_all(:,set,:);
@@ -40,7 +41,6 @@ for i=1:nset
     correction = squeeze(sum(correction,2));
     kx = kx - correction(1,:,:);
     ky = ky - correction(2,:,:);
-    %phase = get_phase(phase);
     
     [Data{i}.kSpace,Data{i}.G] = GROG.SMS_GROG(kSpace_radial,kx,ky,phase,para);
     para.Recon.nor = nor_sl;
@@ -54,13 +54,17 @@ siz(4) = nset;
 Image_PD = zeros(siz,'single');
 
 %% reconstruction
+%  global reconstruction parameters
+para.Recon.type = 'seperate SMS test';
+para.Recon.noi = 150;
+
 for i=1:nset
     fprintf(sprintf('SMS slice group %g\n', i))
+    % set reconstruction parameters for eact set
     scale = max(abs(Data{i}.first_est(:)));
     para.Recon.weight_tTV = scale*0.05;
     para.Recon.weight_sTV = scale*0.008;
-    para.Recon.type = 'seperate SMS test';
-    para.Recon.noi = 150;
+    % sort only non-zero k-space data to save memory
     for j=1:para.Recon.no_comp
         k_temp = Data{i}.kSpace(:,:,:,j,:,:,:);
         kSpace(:,j) = k_temp(Data{i}.mask);
