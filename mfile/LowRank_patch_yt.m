@@ -6,6 +6,8 @@ siz = size(Image);
 % end
 
 patch_size = [5,5,2];
+tau = 20;
+
 patch_begin_x = 1:patch_size(1):siz(1);
 if patch_begin_x(end) + patch_size(1) -1 > siz(1)
     patch_begin_x(end) = siz(1) - patch_size(1) + 1;
@@ -32,7 +34,7 @@ for nphase = 1:siz(5)
                 patch_temp = Image_phase(nx:nx+patch_size(1)-1,ny:ny+patch_size(2)-1,nz:nz+patch_size(3)-1,:);
                 patch_temp = reshape(patch_temp,[prod(patch_size),siz(4)]);
                 [U,S,V] = svd(patch_temp,0);
-                S = S - 20;
+                S = S - tau;
                 S(S<0) = 0;
                 patch_temp = U*S*V';
                 patch_temp = reshape(patch_temp,[patch_size,siz(4)]);

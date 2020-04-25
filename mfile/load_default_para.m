@@ -13,7 +13,7 @@ para.setting.ifplot = 1;
 para.weight_sTV = 0.001;
 para.weight_tTV = 0.02;
 
-para.Recon.eosilon = eps('single');
+para.Recon.epsilon = eps('single');
 para.Recon.step_size = 2;
 para.Recon.noi = 150;
 para.Recon.break = 0;

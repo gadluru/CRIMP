@@ -81,7 +81,7 @@ ifplot         = para.setting.ifplot;
 ifGPU          = para.setting.ifGPU;
 weight_tTV     = para.Recon.weight_tTV;
 weight_sTV     = para.Recon.weight_sTV;
-epsilon        = para.Recon.eosilon;
+epsilon        = para.Recon.epsilon;
 para.Recon.step_size = para.Recon.step_size(1);
 
 if isfield(Data,'first_guess')
