@@ -71,11 +71,12 @@ load([para.dir.load_kSpace_dir,para.dir.load_kSpace_name], 'kSpace', 'kSpace_inf
 save(fullfile(para.dir.save_recon_img_dir,para.dir.save_recon_img_name),'para','-v7.3')
 
 %% set some parameters
-set = kSpace_info.set==0;
-set = find(set); set = set(1:600);
 nset = max(kSpace_info.set(:))+1;
 nSMS = max(kSpace_info.phase_mod(:))+1; % number of SMS slices
+
+para.Recon.nset = nset;
 para.Recon.nSMS = nSMS;
+
 [sx,nor_all,no_comp] = size(kSpace);
 
 para.Recon.sx = sx;
@@ -84,6 +85,8 @@ para.Recon.no_comp = no_comp;
 non_steady_state_rays = 360;
 
 %% RING trajectory correction using PD rays
+set = kSpace_info.set == 0;
+set = find(set); set = set(1:para.kSpace_info.PD_rays/nset);
 para.trajectory_correction = RING_SMS(kSpace(:,set,:), kSpace_info.angle_mod(set), nSMS);
 
 %% reconstruct proton density (PD) weighted images

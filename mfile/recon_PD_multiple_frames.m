@@ -4,22 +4,19 @@ kSpace_info.angle_mod = kSpace_info.angle_mod(:,1:kSpace_info.PD_rays,:);
 kSpace_info.phase_mod = kSpace_info.phase_mod(:,1:kSpace_info.PD_rays,:);
 kSpace_info.set = kSpace_info.set(:,1:kSpace_info.PD_rays,:);
 
-para.kSpace_info = kSpace_info;
-
 [sx,nor_all,no_comp] = size(kSpace_all);
 
-para.Recon.nSMS = max(kSpace_info.phase_mod(:))+1;
 kCenter = para.Recon.kSpace_center;
 % para.setting.ifplot = 1;
 % para.setting.ifGPU = 0;
 
-nset = max(kSpace_info.set(:))+1;
+nset   = para.Recon.nset;
 nor_sl = para.Recon.nor_sl;
 
 %% pre-interpolation
 Data = cell(1, nset);
-for i=1:nset
-    set = kSpace_info.set==i-1;
+for i = 1:nset
+    set = kSpace_info.set == i-1;
     kSpace_radial = kSpace_all(:,set,:);
     theta = kSpace_info.angle_mod(set);
     phase = kSpace_info.phase_mod(set);
