@@ -23,11 +23,13 @@ function [csm] = ismrm_estimate_csm_walsh_optimized_yt(img, smoothing)
 %   Michael S. Hansen (michael.hansen@nih.gov)
 %
 
+% The Walsh method is the same with SOS combination if not smoothing
+% Ye 04/29/20
 if nargin < 2
     smoothing = 5;
 end
 
-[x,y,ncoils] = size(img);
+ncoils = size(img, 3);
 
 % normalize by root sum of squares magnitude
 mag = sqrt(sum(img .* conj(img),3));
@@ -36,36 +38,22 @@ s_raw = bsxfun(@rdivide,img,mag+eps); clear mag;
 
 
 % compute sample correlation estimates at each pixel location
-Rs = ismrm_correlation_matrix(s_raw);
+% Rs = ismrm_correlation_matrix(s_raw);
+Rs = permute(conj(s_raw), [1,2,4,3]).*(s_raw);
 
 
 % apply spatial smoothing to sample correlation estimates (NxN convolution)
 if smoothing>1
-    
-    
 	h_smooth = ones(smoothing)/(smoothing^2); % uniform smoothing kernel
-
-    if smoothing>18
-        shift_lines = floor(smoothing/2);
-        h_smooth_f = fft2(h_smooth,x,y);
-        Rs = ifft2(bsxfun(@times,fft2(Rs),h_smooth_f));
-        Rs(end+1:end+shift_lines,:,:,:) = Rs(1:shift_lines,:,:,:);
-        Rs(1:shift_lines,:,:,:) = [];
-        Rs(:,end+1:end+shift_lines,:,:) = Rs(:,1:shift_lines,:,:);
-        Rs(:,1:shift_lines,:,:) = [];
-    else
-        for m = 1:ncoils
-            for n = 1:ncoils
-                Rs(:,:,m,n) = conv2(Rs(:,:,m,n),h_smooth,'same');
-            end
+    for m = 1:ncoils
+        for n = 1:ncoils
+            Rs(:,:,m,n) = conv2(Rs(:,:,m,n),h_smooth,'same');
         end
     end
 end
 
-
 % compute dominant eigenvectors of sample correlation matrices
 [csm,~] = ismrm_eig_power(Rs); % using power method
-
 
 return 
 
@@ -125,7 +113,8 @@ d=zeros(rows,cols);
 for i=1:N_iterations
     %v=squeeze(sum(R.*repmat(v,[1 1 1 ncoils]),3));
 	v = squeeze(sum(bsxfun(@times,R,v),3));
-    d=ismrm_rss(v);
+%     d=ismrm_rss(v);
+    d = sos(v);
     d( d < eps) = eps;
 	%v=v./repmat(d,[1 1 ncoils]);
     v = bsxfun(@rdivide,v,d);
