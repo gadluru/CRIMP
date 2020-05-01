@@ -9,10 +9,12 @@ function [fidelity_update, fidelity_norm] = compute_fidelity_yt_new(image, Data,
 %       - image             [sx, sy, nof, ...]
 %       - Data              [structure]
 %       - para              [structure]
+%           Recon.type      [string]
 %
 %       - image             image
 %       - Data              see 'help STCR_conjugate_gradient.m'
 %       - para              see 'help STCR_conjugate_gradient.m'
+%       - para.Recon.type   reconstruction type
 %--------------------------------------------------------------------------
 %   Output:
 %       - fidelity_update   [sx, sy, nof, ...]

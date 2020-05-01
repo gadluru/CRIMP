@@ -26,6 +26,8 @@ function [Image,para] = STCR_conjugate_gradient(Data,para)
 %               Recon.weight_sTV    [scalar]
 %               Recon.epsilon       [scalar]
 %               Recon.step_size     [scalar]
+%               Recon.noi           [positive integer]
+%               Recon.type          [string]
 %
 %       - Data
 %           Data.kSpace             measured k-space data "d"
@@ -40,6 +42,9 @@ function [Image,para] = STCR_conjugate_gradient(Data,para)
 %           para.Recon.weight_sTV   "lambda_s"
 %           para.Recon.epsilon      "epsilon"
 %           para.Recon.step_size    initial CG update step size
+%           para.Recon.noi          number of iterations
+%           para.Recon.type         reconstruction type see 
+%                                   'compute_fidelity_ye_new'
 %--------------------------------------------------------------------------
 %   Output:
 %       - Image     [sx, sy, nof, ...]
